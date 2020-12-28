@@ -40,8 +40,8 @@ class PathoAugmentation(object):
                                            albumentations.VerticalFlip(p=0.5),
                                            albumentations.HorizontalFlip(p=0.5),
                                            albumentations.transforms.Rotate(limit=15, border_mode=cv2.BORDER_WRAP, p=0.5),
-                                           #albumentations.imgaug.transforms.IAAAdditiveGaussianNoise(p=0.3),
-                                           #albumentations.augmentations.transforms.MultiplicativeNoise (multiplier=(0.95, 1.05), elementwise=True, p=0.5),
+                                           albumentations.imgaug.transforms.IAAAdditiveGaussianNoise(p=0.3),
+                                           albumentations.augmentations.transforms.MultiplicativeNoise (multiplier=(0.95, 1.05), elementwise=True, p=0.5),
                                            albumentations.augmentations.transforms.HueSaturationValue(hue_shift_limit=10, 
                                                                                                       sat_shift_limit=10, 
                                                                                                       val_shift_limit=10, p=0.3)
@@ -297,7 +297,7 @@ class TileDataset:
             tiles = self.stain_wrapper.fit(tiles, self._trim_name_to_shortname(self.img_names[idx]))
         
         # remove background
-        # tiles = [pad_background(tile) for tile in tiles]
+        tiles = [pad_background(tile) for tile in tiles]
 
         # discrete augmentation will be performed image-wise before concatenation
         # complete augmentation will be performed to the concatenated big image 

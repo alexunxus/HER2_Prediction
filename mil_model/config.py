@@ -2,7 +2,7 @@ from yacs.config import CfgNode as CN
 
 _C                = CN() # Node, lv0
 _C.SYSTEM         = CN() # None, lv1
-_C.SYSTEM.DEVICES = [5]
+_C.SYSTEM.DEVICES = [0]
 
 _C.SOURCE = CN()
 _C.SOURCE.DEBUG       = False
@@ -41,7 +41,7 @@ _C.MODEL.OPTIMIZER         = "Adam" #"SGD" # SGD, Adam
 _C.MODEL.CRITERION         = "BCE"
 _C.MODEL.CHECKPOINT_PATH   = './checkpoint/'
 _C.MODEL.RESUME_FROM       = './checkpoint/R-18_6_2048best_loss.pth' #'./checkpoint/baseline_6_2048best_f1.pth'
-_C.MODEL.LOAD_CSV          = True
+_C.MODEL.LOAD_CSV          = False
 _C.MODEL.PATIENCE          = 5
 
 _C.METRIC = CN()
