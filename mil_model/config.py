@@ -20,8 +20,8 @@ _C.DATASET.VALID_PATCH_DIR = './valid_patches/'
 _C.DATASET.TEST_PATCH_DIR  = './test_patches/'
 _C.DATASET.CSV1            = '/mnt/cephrbd/data/A20009_CGMH_HER2/HER2_2016-2019_0323.csv'
 _C.DATASET.CSV2            = '/mnt/cephrbd/data/A20009_CGMH_HER2/HER2_positive_2016-2019_compact.csv'
-_C.DATASET.VAHADANE1       = './checkpoint/vahadane1.npy'
-_C.DATASET.VAHADANE2       = './checkpoint/vahadane2.npy'
+_C.DATASET.VAHADANE1       = './checkpoint/vahadane1.pkl'
+_C.DATASET.VAHADANE2       = './checkpoint/vahadane2.pkl'
 
                                
 
@@ -40,7 +40,7 @@ _C.MODEL.NORM_USE          = "bn" # bn, gn, dn
 _C.MODEL.OPTIMIZER         = "Adam" #"SGD" # SGD, Adam
 _C.MODEL.CRITERION         = "BCE"
 _C.MODEL.CHECKPOINT_PATH   = './checkpoint/'
-_C.MODEL.RESUME_FROM       = './checkpoint/R-18_6_2048best_loss.pth' #'./checkpoint/baseline_6_2048best_f1.pth'
+_C.MODEL.RESUME_FROM       = ''#'./checkpoint/R-18_6_2048best_loss.pth' #'./checkpoint/baseline_6_2048best_f1.pth'
 _C.MODEL.LOAD_CSV          = False
 _C.MODEL.PATIENCE          = 5
 

@@ -30,7 +30,7 @@ if __name__ == "__main__":
     #torch.backends.cudnn.benchmark = True
 
     # prepare Vahadane stain normalizer
-    stain_normalizer= VahadaneWrapper(img_dir=cfg.DATASET.TRAIN_IMG_DIR ,
+    stain_normalizer= VahadaneWrapper(img_dir=cfg.DATASET.TRAIN_PATCH_DIR ,
                                       csv1=cfg.DATASET.CSV1,
                                       csv2=cfg.DATASET.CSV2,
                                       vahadane1=cfg.DATASET.VAHADANE1, 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     train_dataset = TileDataset(img_dir   =cfg.DATASET.TRAIN_IMG_DIR, 
                                 json_dir  =cfg.DATASET.TRAIN_BBOX, 
                                 patch_size=cfg.DATASET.PATCH_SIZE, 
-                                patch_dir =cfg.DATASET.TRAIN_PATCH_DIR,
+                                #patch_dir =cfg.DATASET.TRAIN_PATCH_DIR,
                                 resize_ratio=cfg.DATASET.RESIZE_RATIO,
                                 tile_size =cfg.DATASET.TILE_SIZE, 
                                 is_test   =False,

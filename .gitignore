@@ -1,0 +1,15 @@
+*.ipynb
+__pycache__/*
+.ipynb_checkpoints/*
+checkpoint/*
+mil_model/__pycache__/*
+train_bbox/*
+test_bbox/*
+valid_bbox/*
+train_images/*
+test_images/*
+valid_images/*
+train_patches/*
+test_patches/*
+valid_patches/*
+*runs/*

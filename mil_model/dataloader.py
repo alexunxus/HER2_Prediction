@@ -35,6 +35,7 @@ class PathoAugmentation(object):
         discrete augmentation: do these augmentation to each 6*6 tiles in the image respectively
         complete augmentation: do these augmentation to the whole image at one time
     '''
+    '''
     discrete_aug = albumentations.Compose([
                                            albumentations.Transpose(p=0.5),
                                            albumentations.VerticalFlip(p=0.5),
@@ -47,6 +48,11 @@ class PathoAugmentation(object):
                                                                                                       val_shift_limit=10, p=0.3)
                                            ])
     complete_aug = albumentations.Compose([])
+    '''
+    discrete_aug = albumentations.Compose([])
+    complete_aug = albumentations.Compose([albumentations.augmentations.transforms.HueSaturationValue(hue_shift_limit=15, 
+                                                                                                      sat_shift_limit=15, 
+                                                                                                      val_shift_limit=15, p=0.3)])
 
 
 def get_resnet_preproc_fn():
@@ -69,10 +75,10 @@ class VahadaneWrapper:
         
         if vahadane1 is not None and os.path.isfile(vahadane1):
             print(f"Loading two vahadane normalizer")
-            self.vahadane1 = VahadaneNormalizer()
-            self.vahadane1.load_stain_matrix(vahadane1)
-            self.vahadane2 = VahadaneNormalizer()
-            self.vahadane2.load_stain_matrix(vahadane2)
+            self.vahadane1 = VahadaneNormalizer.load(vahadane1)
+            #self.vahadane1.load_stain_matrix(vahadane1)
+            self.vahadane2 = VahadaneNormalizer.load(vahadane2)
+            #self.vahadane2.load_stain_matrix(vahadane2)
         else:
             self.vahadane1, self.vahadane2 = self._fit_domain()
     
@@ -81,9 +87,9 @@ class VahadaneWrapper:
         second_domain_images = []
         for dir_name in os.listdir(self.img_dir):
             short_name = (dir_name[:13])
-            if short_name in dict1:
+            if short_name in self.dict1:
                 first_domain_images.extend(get_n_img(os.path.join(self.img_dir, dir_name), 10))
-            elif short_name in dict2:
+            elif short_name in self.dict2:
                 second_domain_images.extend(get_n_img(os.path.join(self.img_dir, dir_name), 10))
             else:
                 print(f'File {dir_name} is not found in the CSV')
@@ -232,11 +238,11 @@ class TileDataset:
         # cat tile is of type "np.float32", had been normalized to 1
         # test time augmentation: find 4 images and will average their predicted values
         if not self.is_test:
-            img = torch.from_numpy(self._get_one_cat_tile(idx, this_slide).transpose((2, 0, 1))).float()
+            img = torch.from_numpy(self._get_composite_aug_img(idx, this_slide).transpose((2, 0, 1))).float()
             if self.preproc is not None:
                 img = self.preproc(img)
         else:
-            cat_tiles = [self._get_one_cat_tile(idx, this_slide) for i in range(self.dup)]
+            cat_tiles = [self._get_composite_aug_img(idx, this_slide) for i in range(self.dup)]
             img = [torch.from_numpy(np.transpose(cat_tile, (2, 0, 1))).float() for cat_tile in cat_tiles]
             if self.preproc is not None:
                 img = [self.preproc(im) for im in img]
@@ -259,7 +265,7 @@ class TileDataset:
         '''take first 13 character from the string'''
         return name[:13]
     
-    def _get_one_cat_tile(self, idx:int, this_slide: Slide_OSread) -> np.ndarray:
+    def _get_composite_aug_img(self, idx:int, this_slide: Slide_OSread) -> np.ndarray:
         '''
         Argument: 
             this_slide: 
@@ -292,12 +298,14 @@ class TileDataset:
             tiles = [imread(os.path.join(target_dir, all_tiles[index])) 
                      for index in chosen_indexs]
         
+        '''
         # stain normalization
         if self.stain_wrapper:
             tiles = self.stain_wrapper.fit(tiles, self._trim_name_to_shortname(self.img_names[idx]))
         
         # remove background
         tiles = [pad_background(tile) for tile in tiles]
+        '''
 
         # discrete augmentation will be performed image-wise before concatenation
         # complete augmentation will be performed to the concatenated big image 
